@@ -1,0 +1,30 @@
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+
+# Step 1: Load dataset
+iris = load_iris()
+X = iris.data       # Features
+y = iris.target     # Labels
+
+# Step 2: Split dataset (80% train, 20% test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
+
+# Step 3: Create and train the model
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(X_train, y_train)
+
+# Step 4: Predict on test data
+y_pred = knn.predict(X_test)
+
+# Step 5: Print accuracy
+accuracy = knn.score(X_test, y_test)
+print("Predictions:", y_pred)
+print("Actual Labels:", y_test)
+print("Accuracy:", accuracy)
+
+output 
+
+Predictions: [1 0 2 1 1 2 1 0 2 0 0 2 2 2 2 0 1 1 1 0 0 2 1 0 2 2 0 1 0 1]
+Actual Labels: [1 0 2 1 1 2 1 0 2 0 0 2 2 1 2 0 1 1 1 0 0 2 1 0 2 2 0 1 0 1]
+Accuracy: 1.0

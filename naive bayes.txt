@@ -1,0 +1,58 @@
+import math
+
+# Training data: [Outlook, Temperature, Humidity, Wind, PlayTennis]
+data = [
+    ['Sunny', 'Hot', 'High', 'Weak', 'No'],
+    ['Sunny', 'Hot', 'High', 'Strong', 'No'],
+    ['Overcast', 'Hot', 'High', 'Weak', 'Yes'],
+    ['Rain', 'Mild', 'High', 'Weak', 'Yes'],
+    ['Rain', 'Cool', 'Normal', 'Weak', 'Yes'],
+    ['Rain', 'Cool', 'Normal', 'Strong', 'No'],
+    ['Overcast', 'Cool', 'Normal', 'Strong', 'Yes'],
+    ['Sunny', 'Mild', 'High', 'Weak', 'No'],
+    ['Sunny', 'Cool', 'Normal', 'Weak', 'Yes'],
+    ['Rain', 'Mild', 'Normal', 'Weak', 'Yes'],
+    ['Sunny', 'Mild', 'Normal', 'Strong', 'Yes'],
+    ['Overcast', 'Mild', 'High', 'Strong', 'Yes'],
+    ['Overcast', 'Hot', 'Normal', 'Weak', 'Yes'],
+    ['Rain', 'Mild', 'High', 'Strong', 'No']
+]
+
+# Step 1: Calculate prior probabilities P(Yes), P(No)
+def prior_prob(data, label):
+    total = len(data)
+    count = sum(1 for row in data if row[-1] == label)
+    return count / total
+
+# Step 2: Calculate likelihood P(feature=value | label)
+def likelihood(data, feature_index, feature_value, label):
+    subset = [row for row in data if row[-1] == label]
+    count_feature = sum(1 for row in subset if row[feature_index] == feature_value)
+    return count_feature / len(subset)
+
+# Step 3: Naive Bayes prediction
+def predict(data, test_sample):
+    labels = ['Yes', 'No']
+    probs = {}
+    for label in labels:
+        prior = prior_prob(data, label)
+        likelihoods = 1
+        for i in range(len(test_sample)):
+            likelihoods *= likelihood(data, i, test_sample[i], label)
+        probs[label] = prior * likelihoods
+    return max(probs, key=probs.get), probs
+
+# Test sample: Outlook=Sunny, Temperature=Cool, Humidity=High, Wind=Strong
+test_sample = ['Sunny', 'Cool', 'High', 'Strong']
+
+prediction, probabilities = predict(data, test_sample)
+
+print(f"Test Sample: {test_sample}")
+print(f"Predicted Class: {prediction}")
+print(f"Probabilities: {probabilities}")
+
+output
+
+Test Sample: ['Sunny', 'Cool', 'High', 'Strong']
+Predicted Class: No
+Probabilities: {'Yes': 0.0, 'No': 0.04}

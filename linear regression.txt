@@ -1,0 +1,44 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Step 1: Generate synthetic data
+np.random.seed(0)
+X = 2 * np.random.rand(100, 1)
+y = 4 + 3 * X + np.random.randn(100, 1)
+
+# Step 2: Add x0 = 1 to each instance (for bias term)
+X_b = np.c_[np.ones((100, 1)), X]
+
+# Step 3: Calculate the best theta using Normal Equation
+theta_best = np.linalg.inv(X_b.T.dot(X_b)).dot(X_b.T).dot(y)
+
+print("Calculated coefficients (theta):", theta_best.ravel())
+
+# Step 4: Predict values
+y_pred = X_b.dot(theta_best)
+
+# Step 5: Evaluate the performance
+mse = np.mean((y - y_pred) ** 2)
+r2_score = 1 - (np.sum((y - y_pred) ** 2) / np.sum((y - np.mean(y)) ** 2))
+
+print(f"\nPerformance Metrics:\nMean Squared Error (MSE): {mse:.4f}")
+print(f"R² Score: {r2_score:.4f}")
+
+# Step 6: Plotting
+plt.scatter(X, y, color='blue', label='Actual')
+plt.plot(X, y_pred, color='red', label='Predicted Line')
+plt.title("Linear Regression Fit")
+plt.xlabel("X")
+plt.ylabel("y")
+plt.legend()
+plt.grid(True)
+plt.show()
+
+
+output
+
+Calculated coefficients (theta): [4.21509616 2.77011339]
+
+Performance Metrics:
+Mean Squared Error (MSE): 0.8352
+R² Score: 0.9280
